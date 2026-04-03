@@ -2,7 +2,7 @@
 <html lang="cy">
 <head>
 <meta charset="UTF-8">
-<title>Cardiau Fflach Ffiseg</title>
+<title>Flashcards</title>
 
 <style>
     body {
@@ -37,39 +37,29 @@
     .flipped {
         transform: rotateY(180deg);
     }
-
     .side {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        padding: 15px;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-    /* ✅ Pastel colours for flashcard faces */
-
-    /* Front of flashcard — soft pastel peach */
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        background: white;
+        padding: 15px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
     .front {
-        background-color: #FFEFD5;  /* pastel peach */
+        background-color: #ffecb3;  /* soft orange */
     }
-
-    /* Back of flashcard — soft pastel blue */
     .back {
-        background-color: #E0F7FA;  /* pastel aqua/blue */
+        background-color: #c8e6c9;  /* soft green */
+        transform: rotateY(180deg);
     }
-
-    /* OPTIONAL: softer shadow to match pastel theme */
-    .card .side {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
     img {
         max-width: 90%;
         max-height: 80%;
@@ -106,7 +96,7 @@
 </head>
 <body>
 
-<h2>Cardiau Fflach Ffiseg</h2>
+<h2>Flashcards</h2>
 
 <!-- Removed file uploader -->
 
@@ -134,8 +124,7 @@ let cards = [];
 let index = 0;
 
 // 🔗 Your OneDrive direct download link
-//const fileUrl = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/CardiauFflach.xlsx";
-const fileUrl = "https://cdn.statically.io/gh/GwyddonTryfan/CardiauFflach-TGAU/main/CardiauFflach.xlsx";
+const fileUrl = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/CardiauFflach.xlsx";
 
 // Flip card
 document.getElementById("inner").addEventListener("click", () => {
