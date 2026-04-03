@@ -53,18 +53,21 @@
         justify-content: center;
         text-align: center;
     }
-    
-    /* 🎨 Front of the card (Light Blue) */
+    /* ✅ Pastel colours for flashcard faces */
+
+    /* Front of flashcard — soft pastel peach */
     .front {
-        background-color: #e3f2fd; 
-        color: #0d47a1; /* Dark blue text */
+        background-color: #FFEFD5;  /* pastel peach */
     }
 
-    /* 🎨 Back of the card (Light Green) */
+    /* Back of flashcard — soft pastel blue */
     .back {
-        transform: rotateY(180deg);
-        background-color: #e8f5e9; 
-        color: #1b5e20; /* Dark green text */
+        background-color: #E0F7FA;  /* pastel aqua/blue */
+    }
+
+    /* OPTIONAL: softer shadow to match pastel theme */
+    .card .side {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     
     img {
