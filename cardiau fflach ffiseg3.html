@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="cy">
+<head>
+<meta charset="UTF-8">
+<title>Flashcards</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    #unitSelector {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #aaa;
+        margin-bottom: 15px;
+    }
+    .card {
+        width: 500px;
+        height: 300px;
+        perspective: 1000px;
+        margin-top: 20px;
+    }
+    .inner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+        cursor: pointer;
+    }
+    .flipped {
+        transform: rotateY(180deg);
+    }
+    .side {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        background: white;
+        padding: 15px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .back {
+        transform: rotateY(180deg);
+    }
+    img {
+        max-width: 90%;
+        max-height: 80%;
+        margin-bottom: 15px;
+        border-radius: 6px;
+    }
+    #controls {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+    }
+    button {
+        padding: 10px 15px;
+        border: none;
+        background: #0078d4;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #005fa3;
+    }
+</style>
+
+<!-- MathJax support -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+
+</head>
+<body>
+
+<h2>Flashcards</h2>
+
+<!-- Removed file uploader -->
+
+<label for="unitSelector">Dewis Uned:</label>
+<select id="unitSelector"></select>
+
+<div class="card" id="card">
+    <div class="inner" id="inner">
+        <div class="side front" id="front"></div>
+        <div class="side back" id="back"></div>
+    </div>
+</div>
+
+<div id="controls">
+    <button onclick="prevCard()">Previous</button>
+    <button onclick="nextCard()">Next</button>
+    <button onclick="shuffleCards()">Shuffle</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+let workbook;
+let cards = [];
+let index = 0;
+
+// 🔗 Your OneDrive direct download link
+const fileUrl = "https://hwbwave15-my.sharepoint.com/:x:/g/personal/griffithsr144_hwbcymru_net/IQAA-J-72-SZR6r9itXnm7KrAS2FZIzONIecY2S5TL2Vf88?download=1";
+
+// Flip card
+document.getElementById("inner").addEventListener("click", () => {
+    document.getElementById("inner").classList.toggle("flipped");
+});
+
+// Load selected unit
+document.getElementById("unitSelector").addEventListener("change", loadUnit);
+
+// 🔄 Automatically load Excel file from OneDrive
+window.addEventListener("DOMContentLoaded", () => {
+    fetch(fileUrl)
+        .then(res => res.arrayBuffer())
+        .then(buffer => {
+            workbook = XLSX.read(buffer, { type: "array" });
+
+            const selector = document.getElementById("unitSelector");
+            selector.innerHTML = "";
+
+            workbook.SheetNames.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                selector.appendChild(option);
+            });
+
+            loadUnit();
+        })
+        .catch(err => console.error("Error loading Excel file:", err));
+});
+
+// Load selected sheet and convert to flashcards
+function loadUnit() {
+    const unit = document.getElementById("unitSelector").value;
+
+    const sheet = workbook.Sheets[unit];
+    const json = XLSX.utils.sheet_to_json(sheet);
+
+    cards = json.map(row => ({
+        question: row["Cwestiwn"],
+        answer: row["Ateb"],
+        image: row["Delwedd"]
+    }));
+
+    index = 0;
+    displayCard();
+}
+
+// Display flashcard
+function displayCard() {
+    const card = cards[index];
+    const front = document.getElementById("front");
+    const back = document.getElementById("back");
+
+    front.innerHTML = "";
+
+    if (card.image) {
+        const img = document.createElement("img");
+        img.src = "images/" + card.image;
+        front.appendChild(img);
+    }
+
+    const q = document.createElement("div");
+    q.innerHTML = card.question;
+    front.appendChild(q);
+
+    back.innerHTML = card.answer;
+
+    MathJax.typesetPromise();
+
+    document.getElementById("inner").classList.remove("flipped");
+}
+
+// Navigation + shuffle
+function nextCard() {
+    index = (index + 1) % cards.length;
+    displayCard();
+}
+
+function prevCard() {
+    index = (index - 1 + cards.length) % cards.length;
+    displayCard();
+}
+
+function shuffleCards() {
+    for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+    index = 0;
+    displayCard();
+}
+</script>
+
+</body>
+</html>
