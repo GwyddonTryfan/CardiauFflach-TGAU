@@ -102,8 +102,21 @@
 
 <!-- Removed file uploader -->
 
-<label for="unitSelector">Dewis Uned:</label>
-<select id="unitSelector"></select>
+<div style="display: flex; gap: 20px;">
+    <div>
+        <label for="subjectSelector">Dewis Pwnc:</label>
+        <select id="subjectSelector" onchange="loadExcelFile()">
+            <option value="Ffiseg">Ffiseg</option>
+            <option value="Cemeg">Cemeg</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="unitSelector">Dewis Uned:</label>
+        <select id="unitSelector"></select>
+    </div>
+</div>
+    
 <p id="counter" style="font-weight: bold; color: #555; margin-bottom: 5px;"></p>
 <div class="card" id="card">
     <div class="inner" id="inner">
