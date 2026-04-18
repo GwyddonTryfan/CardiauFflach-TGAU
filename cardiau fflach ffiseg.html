@@ -182,28 +182,6 @@ document.getElementById("inner").addEventListener("click", () => {
 // Load selected unit
 document.getElementById("unitSelector").addEventListener("change", loadUnit);
 
-// 🔄 Automatically load Excel file from OneDrive
-window.addEventListener("DOMContentLoaded", () => {
-    fetch(fileUrl)
-        .then(res => res.arrayBuffer())
-        .then(buffer => {
-            workbook = XLSX.read(buffer, { type: "array" });
-
-            const selector = document.getElementById("unitSelector");
-            selector.innerHTML = "";
-
-            workbook.SheetNames.forEach(name => {
-                const option = document.createElement("option");
-                option.value = name;
-                option.textContent = name;
-                selector.appendChild(option);
-            });
-
-            loadUnit();
-        })
-        .catch(err => console.error("Error loading Excel file:", err));
-});
-
 // Load selected sheet and convert to flashcards
 function loadUnit() {
     const unit = document.getElementById("unitSelector").value;
