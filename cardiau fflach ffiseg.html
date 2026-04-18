@@ -226,25 +226,37 @@ function displayCard() {
     const card = cards[index];
     const front = document.getElementById("front");
     const back = document.getElementById("back");
-// Update the counter text
-    document.getElementById("counter").textContent = `Cerdyn ${index + 1} o ${cards.length}`;
+    const counter = document.getElementById("counter");
     
-    front.innerHTML = "";
+    // 1. Update the counter text
+    if (counter) {
+        counter.textContent = `Cerdyn ${index + 1} o ${cards.length}`;
+    }
 
+    // 2. Clear the front of the card to start fresh
+    front.innerHTML = "";
+    
+    // 3. Add the image IF it exists in the Excel row
     if (card.image) {
         const img = document.createElement("img");
         img.src = "images/" + card.image;
+        // Optional: add an error check so the card doesn't look broken if image is missing
+        img.onerror = function() { this.style.display = 'none'; }; 
         front.appendChild(img);
     }
 
+    // 4. Add the question text
     const q = document.createElement("div");
     q.innerHTML = card.question;
     front.appendChild(q);
 
+    // 5. Update the back of the card
     back.innerHTML = card.answer;
 
+    // 6. Tell MathJax to look for new equations
     MathJax.typesetPromise();
 
+    // 7. Make sure the card starts on the front side
     document.getElementById("inner").classList.remove("flipped");
 }
 
