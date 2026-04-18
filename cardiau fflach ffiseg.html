@@ -218,19 +218,19 @@ function displayCard() {
     // 3. Add the image IF it exists in the Excel row
 
     if (card.image) {
-    const img = document.createElement("img");
-    const cleanFileName = card.image.trim(); 
-    
-    // This points directly to your GitHub 'main' branch images folder
-    // Replace 'GwyddonTryfan' and 'CardiauFflach-TGAU' if your repo name is different
-    const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
-    
-    img.src = githubBase + cleanFileName;
+        const img = document.createElement("img");
+        const cleanFileName = card.image.trim(); 
+        
+        // This points directly to your GitHub 'main' branch images folder
+        // Replace 'GwyddonTryfan' and 'CardiauFflach-TGAU' if your repo name is different
+        const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
+        
+        img.src = githubBase + cleanFileName;
 
-    img.onerror = function() {
-        console.error("Still 404 at: " + this.src);
-        };
-    front.appendChild(img);
+        img.onerror = function() {
+            console.error("Still 404 at: " + this.src);
+            };
+        front.appendChild(img);
     }
 
     // 4. Add the question text
@@ -238,12 +238,12 @@ function displayCard() {
     q.innerHTML = card.question;
     front.appendChild(q);
 
-// 3. DEBUG LINE (You can delete this once fixed)
-    const debugText = document.createElement("div");
-    debugText.style.fontSize = "10px";
-    debugText.style.color = "red";
-    debugText.innerText = card.image ? "File: " + card.image : "No image found in Excel";
-    front.appendChild(debugText);
+    // 3. DEBUG LINE (You can delete this once fixed)
+    //    const debugText = document.createElement("div");
+    //    debugText.style.fontSize = "10px";
+    //    debugText.style.color = "red";
+    //    debugText.innerText = card.image ? "File: " + card.image : "No image found in Excel";
+    //    front.appendChild(debugText);
     
     // 5. Update the back of the card
     back.innerHTML = card.answer;
