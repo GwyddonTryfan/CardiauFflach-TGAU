@@ -219,19 +219,19 @@ function displayCard() {
 
     if (card.image) {
     const img = document.createElement("img");
-    // .trim() removes any hidden spaces from the Excel cell
     const cleanFileName = card.image.trim(); 
     
-    // Use the relative path to the images folder
-    img.src = "./images/" + cleanFileName;
+    // This points directly to your GitHub 'main' branch images folder
+    // Replace 'GwyddonTryfan' and 'CardiauFflach-TGAU' if your repo name is different
+    const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
     
+    img.src = githubBase + cleanFileName;
+
     img.onerror = function() {
-        console.error("Methu canfod delwedd yn: " + this.src);
-        // This will help us see if it's a path issue
-        this.style.border = "2px solid red"; 
+        console.error("Still 404 at: " + this.src);
         };
     front.appendChild(img);
-    }    
+    }
 
     // 4. Add the question text
     const q = document.createElement("div");
