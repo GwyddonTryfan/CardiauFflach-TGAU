@@ -250,6 +250,13 @@ function displayCard() {
     q.innerHTML = card.question;
     front.appendChild(q);
 
+// 3. DEBUG LINE (You can delete this once fixed)
+    const debugText = document.createElement("div");
+    debugText.style.fontSize = "10px";
+    debugText.style.color = "red";
+    debugText.innerText = card.image ? "File: " + card.image : "No image found in Excel";
+    front.appendChild(debugText);
+    
     // 5. Update the back of the card
     back.innerHTML = card.answer;
 
