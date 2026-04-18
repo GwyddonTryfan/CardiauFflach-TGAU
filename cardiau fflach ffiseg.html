@@ -138,9 +138,42 @@ let workbook;
 let cards = [];
 let index = 0;
 
-// 🔗 Your OneDrive direct download link
-const fileUrl = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/CardiauFflach.xlsx";
+// Update these URLs to match your GitHub file paths
+const fileUrls = {
+    "Ffiseg": "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/CardiauFflachFfiseg.xlsx",
+    "Cemeg": "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/CardiauFflachCemeg.xlsx" 
+};
 
+// Automatically load the default subject on startup
+window.addEventListener("DOMContentLoaded", loadExcelFile);
+
+function loadExcelFile() {
+    const subject = document.getElementById("subjectSelector").value;
+    const url = fileUrls[subject];
+
+    fetch(url)
+        .then(res => res.arrayBuffer())
+        .then(buffer => {
+            workbook = XLSX.read(buffer, { type: "array" });
+
+            const selector = document.getElementById("unitSelector");
+            selector.innerHTML = ""; // Clear old units
+
+            workbook.SheetNames.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                selector.appendChild(option);
+            });
+
+            loadUnit(); // Load the first unit of the new subject
+        })
+        .catch(err => {
+            console.error("Error loading Excel file:", err);
+            alert("Methu llwytho data " + subject);
+        });
+}
+  
 // Flip card
 document.getElementById("inner").addEventListener("click", () => {
     document.getElementById("inner").classList.toggle("flipped");
