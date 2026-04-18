@@ -145,19 +145,23 @@ const fileUrls = {
 };
 
 // Automatically load the default subject on startup
+
 window.addEventListener("DOMContentLoaded", loadExcelFile);
 
 function loadExcelFile() {
-    const subject = document.getElementById("subjectSelector").value;
+    const subjectSelector = document.getElementById("subjectSelector");
+    const subject = subjectSelector.value;
     const url = fileUrls[subject];
 
     fetch(url)
-        .then(res => res.arrayBuffer())
+        .then(res => {
+            if (!res.ok) throw new Error("Gwall lwytho ffeil: " + res.statusText);
+            return res.arrayBuffer();
+        })
         .then(buffer => {
             workbook = XLSX.read(buffer, { type: "array" });
-
             const selector = document.getElementById("unitSelector");
-            selector.innerHTML = ""; // Clear old units
+            selector.innerHTML = ""; 
 
             workbook.SheetNames.forEach(name => {
                 const option = document.createElement("option");
@@ -166,12 +170,9 @@ function loadExcelFile() {
                 selector.appendChild(option);
             });
 
-            loadUnit(); // Load the first unit of the new subject
+            loadUnit();
         })
-        .catch(err => {
-            console.error("Error loading Excel file:", err);
-            alert("Methu llwytho data " + subject);
-        });
+        .catch(err => console.error("Error:", err));
 }
   
 // Flip card
@@ -215,13 +216,22 @@ function displayCard() {
     front.innerHTML = "";
     
     // 3. Add the image IF it exists in the Excel row
+
     if (card.image) {
-        const img = document.createElement("img");
-        img.src = "images/" + card.image;
-        // Optional: add an error check so the card doesn't look broken if image is missing
-        img.onerror = function() { this.style.display = 'none'; }; 
-        front.appendChild(img);
-    }
+    const img = document.createElement("img");
+    // .trim() removes any hidden spaces from the Excel cell
+    const cleanFileName = card.image.trim(); 
+    
+    // Use the relative path to the images folder
+    img.src = "./images/" + cleanFileName;
+    
+    img.onerror = function() {
+        console.error("Methu canfod delwedd yn: " + this.src);
+        // This will help us see if it's a path issue
+        this.style.border = "2px solid red"; 
+        };
+    front.appendChild(img);
+    }    
 
     // 4. Add the question text
     const q = document.createElement("div");
