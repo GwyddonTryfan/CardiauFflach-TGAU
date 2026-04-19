@@ -90,6 +90,12 @@
     button:hover {
         background: #005fa3;
     }
+
+    .instruction-box {
+    text-align: left;
+    width: 90%;          /* Leaves a small gap on the sides */
+    margin: 0 auto;      /* Keeps the box itself in the middle */
+    }    
 </style>
 
 <!-- MathJax support -->
@@ -254,7 +260,9 @@ function displayCard() {
     //    front.appendChild(debugText);
     
     // 5. Update the back of the card
-    back.innerHTML = card.answer;
+    //back.innerHTML = card.answer;
+    // Wrap the answer in the instruction-box div
+    back.innerHTML = `<div class="instruction-box">${card.answer}</div>`;
 
     // 6. Tell MathJax to look for new equations
     MathJax.typesetPromise();
