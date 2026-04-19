@@ -232,7 +232,9 @@ function displayCard() {
         const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
         
         img.src = githubBase + cleanFileName;
-
+        // Optional: Force the aspect ratio logic directly if CSS feels stubborn
+        img.style.aspectRatio = "attr(width) / attr(height)";
+        
         img.onerror = function() {
             console.error("Still 404 at: " + this.src);
             };
