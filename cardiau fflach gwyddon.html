@@ -62,12 +62,18 @@
         background-color: #c8e6c9;  /* soft green */
         transform: rotateY(180deg);
     }
+
     img {
-        max-width: 90%;
-        max-height: 80%;
+        max-width: 95%;      /* Prevents the image from hitting the edges */
+        max-height: 80%;   /* Limits height to leave room for text below */
+        width: auto;         /* Allows width to scale naturally */
+        height: auto;        /* Allows height to scale naturally */
+        object-fit: contain; /* The magic line: preserves aspect ratio */
         margin-bottom: 15px;
         border-radius: 6px;
+        display: block;      /* Helps with centering */
     }
+    
     #controls {
         margin-top: 20px;
         display: flex;
