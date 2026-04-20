@@ -214,45 +214,61 @@ function loadUnit() {
     displayCard();
 }
 
-// Display flashcard
+
 function displayCard() {
     const card = cards[index];
     const front = document.getElementById("front");
     const back = document.getElementById("back");
     const counter = document.getElementById("counter");
+    const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
     
-    // 1. Update the counter text
+    // 1. Update the counter
     if (counter) {
         counter.textContent = `Cerdyn ${index + 1} o ${cards.length}`;
     }
 
-    // 2. Clear the front of the card to start fresh
-    front.innerHTML = "";
-    
-    // 3. Add the question image IF it exists in the Excel row
+    // --- FRONT OF CARD ---
+    front.innerHTML = ""; // Clear front
 
     if (card.image) {
         const img = document.createElement("img");
-        const cleanFileName = card.image.trim(); 
-        
-        // This points directly to your GitHub 'main' branch images folder
-        // Replace 'GwyddonTryfan' and 'CardiauFflach-TGAU' if your repo name is different
-        const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
-        
-        img.src = githubBase + cleanFileName;
-        // Optional: Force the aspect ratio logic directly if CSS feels stubborn
-        img.style.aspectRatio = "attr(width) / attr(height)";
-        
-        img.onerror = function() {
-            console.error("Still 404 at: " + this.src);
-            };
+        img.src = githubBase + card.image.trim();
+        img.onerror = function() { this.style.display = 'none'; };
         front.appendChild(img);
     }
 
-    // 4. Add the question text
     const q = document.createElement("div");
-    q.innerHTML = card.question;
+    q.className = "instruction-box";
+    q.innerHTML = card.question.replace(/\n/g, "<br>");
     front.appendChild(q);
+
+
+    // --- BACK OF CARD ---
+    back.innerHTML = ""; // Clear back
+
+    // 2. Add Answer Image if it exists
+    if (card.answerImage) {
+        const aImg = document.createElement("img");
+        aImg.src = githubBase + card.answerImage.trim();
+        aImg.onerror = function() { 
+            console.error("Methu canfod delwedd ateb: " + this.src);
+            this.style.display = 'none'; 
+        };
+        back.appendChild(aImg);
+    }
+
+    // 3. Add Answer Text
+    const aText = document.createElement("div");
+    aText.className = "instruction-box";
+    aText.innerHTML = card.answer.replace(/\n/g, "<br>");
+    back.appendChild(aText);
+
+
+    // --- FINAL WRAP UP ---
+    MathJax.typesetPromise();
+    document.getElementById("inner").classList.remove("flipped");
+}
+
 
     // 3. DEBUG LINE (You can delete this once fixed)
     //    const debugText = document.createElement("div");
@@ -260,44 +276,6 @@ function displayCard() {
     //    debugText.style.color = "red";
     //    debugText.innerText = card.image ? "File: " + card.image : "No image found in Excel";
     //    front.appendChild(debugText);
-
-
-    // Clear the back of the card
-    back.innerHTML = "";
-    
-    // Add the answer image IF it exists
-    if (card.answerImage) {
-        const aImg = document.createElement("img");
-        const cleanAnswerFile = card.answerImage.trim();
-        const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
-        
-        aImg.src = githubBase + cleanAnswerFile;
-        
-        aImg.onerror = function() {
-            console.error("Methu canfod delwedd ateb: " + this.src);
-        };
-        back.appendChild(aImg);
-    }
-    
-    // Now add the answer text below the image
-    const aText = document.createElement("div");
-    aText.className = "instruction-box";
-    // Convert Excel newlines to HTML breaks
-    aText.innerHTML = card.answer.replace(/\n/g, "<br>");
-    back.appendChild(aText);
-    
-    // 5. Update the back of the card
-    //back.innerHTML = card.answer;
-    // Wrap the answer in the instruction-box div
-    back.innerHTML = `<div class="instruction-box">${card.answer}</div>`;
-    back.innerHTML = `<div class="instruction-box">${card.answer}</div>`;
-
-    // 6. Tell MathJax to look for new equations
-    MathJax.typesetPromise();
-
-    // 7. Make sure the card starts on the front side
-    document.getElementById("inner").classList.remove("flipped");
-}
 
 // Navigation + shuffle
 function nextCard() {
