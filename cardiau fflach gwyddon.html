@@ -206,7 +206,8 @@ function loadUnit() {
     cards = json.map(row => ({
         question: row["Cwestiwn"],
         answer: row["Ateb"],
-        image: row["Delwedd Cwestiwn"]       
+        image: row["Delwedd Cwestiwn"],
+        answerImage: row["Delwedd Ateb"]
     }));
 
     index = 0;
@@ -260,6 +261,30 @@ function displayCard() {
     //    debugText.innerText = card.image ? "File: " + card.image : "No image found in Excel";
     //    front.appendChild(debugText);
 
+
+    // Clear the back of the card
+    back.innerHTML = "";
+    
+    // Add the answer image IF it exists
+    if (card.answerImage) {
+        const aImg = document.createElement("img");
+        const cleanAnswerFile = card.answerImage.trim();
+        const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
+        
+        aImg.src = githubBase + cleanAnswerFile;
+        
+        aImg.onerror = function() {
+            console.error("Methu canfod delwedd ateb: " + this.src);
+        };
+        back.appendChild(aImg);
+    }
+    
+    // Now add the answer text below the image
+    const aText = document.createElement("div");
+    aText.className = "instruction-box";
+    // Convert Excel newlines to HTML breaks
+    aText.innerHTML = card.answer.replace(/\n/g, "<br>");
+    back.appendChild(aText);
     
     // 5. Update the back of the card
     //back.innerHTML = card.answer;
