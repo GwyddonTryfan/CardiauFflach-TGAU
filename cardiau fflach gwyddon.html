@@ -206,8 +206,7 @@ function loadUnit() {
     cards = json.map(row => ({
         question: row["Cwestiwn"],
         answer: row["Ateb"],
-        qimage: row["Delwedd Cwestiwn"],
-        aimage: row["Delwedd Ateb"]        
+        image: row["Delwedd Cwestiwn"]       
     }));
 
     index = 0;
@@ -231,22 +230,22 @@ function displayCard() {
     
     // 3. Add the question image IF it exists in the Excel row
 
-    if (card.qimage) {
-        const qimg = document.createElement("qimg");
-        const cleanFileName = card.qimage.trim(); 
+    if (card.image) {
+        const img = document.createElement("img");
+        const cleanFileName = card.image.trim(); 
         
         // This points directly to your GitHub 'main' branch images folder
         // Replace 'GwyddonTryfan' and 'CardiauFflach-TGAU' if your repo name is different
         const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
         
-        qimg.src = githubBase + cleanFileName;
+        img.src = githubBase + cleanFileName;
         // Optional: Force the aspect ratio logic directly if CSS feels stubborn
-        qimg.style.aspectRatio = "attr(width) / attr(height)";
+        img.style.aspectRatio = "attr(width) / attr(height)";
         
-        qimg.onerror = function() {
+        img.onerror = function() {
             console.error("Still 404 at: " + this.src);
             };
-        front.appendChild(qimg);
+        front.appendChild(img);
     }
 
     // 4. Add the question text
@@ -261,25 +260,6 @@ function displayCard() {
     //    debugText.innerText = card.image ? "File: " + card.image : "No image found in Excel";
     //    front.appendChild(debugText);
 
-    // 3. Add the question image IF it exists in the Excel row
-
-    if (card.aimage) {
-        const aimg = document.createElement("aimg");
-        const cleanFileName = card.aimage.trim(); 
-        
-        // This points directly to your GitHub 'main' branch images folder
-        // Replace 'GwyddonTryfan' and 'CardiauFflach-TGAU' if your repo name is different
-        const githubBase = "https://raw.githubusercontent.com/GwyddonTryfan/CardiauFflach-TGAU/main/images/";
-        
-        aimg.src = githubBase + cleanFileName;
-        // Optional: Force the aspect ratio logic directly if CSS feels stubborn
-        aimg.style.aspectRatio = "attr(width) / attr(height)";
-        
-        aimg.onerror = function() {
-            console.error("Still 404 at: " + this.src);
-            };
-        back.appendChild(aimg);
-    }
     
     // 5. Update the back of the card
     //back.innerHTML = card.answer;
